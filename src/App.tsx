@@ -476,7 +476,8 @@ function Team() {
   const [center, setCenter] = useState(0);
   const moving = useRef(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const swipeStart = useRef<{ x: number; y: number; id: number } | null>(null);
+  const suppressClick = useRef(false);
 
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
@@ -512,14 +513,27 @@ function Team() {
               move(event.key === "ArrowLeft" ? -1 : 1);
             }
           }}
-          onTouchStart={(event) => { touchStart.current = { x: event.touches[0].clientX, y: event.touches[0].clientY }; }}
-          onTouchCancel={() => { touchStart.current = null; }}
-          onTouchEnd={(event) => {
-            if (!touchStart.current) return;
-            const dx = event.changedTouches[0].clientX - touchStart.current.x;
-            const dy = event.changedTouches[0].clientY - touchStart.current.y;
-            touchStart.current = null;
+          onPointerDown={(event) => {
+            if (!event.isPrimary || event.button !== 0) return;
+            suppressClick.current = false;
+            swipeStart.current = { x: event.clientX, y: event.clientY, id: event.pointerId };
+            (event.target as HTMLElement).setPointerCapture(event.pointerId);
+          }}
+          onPointerCancel={() => { swipeStart.current = null; }}
+          onLostPointerCapture={() => { swipeStart.current = null; }}
+          onPointerUp={(event) => {
+            if (!swipeStart.current || swipeStart.current.id !== event.pointerId) return;
+            const dx = event.clientX - swipeStart.current.x;
+            const dy = event.clientY - swipeStart.current.y;
+            swipeStart.current = null;
+            suppressClick.current = Math.abs(dx) > 40 || Math.abs(dy) > 40;
             if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) move(dx < 0 ? 1 : -1);
+          }}
+          onClickCapture={(event) => {
+            if (!suppressClick.current || event.detail === 0) return;
+            event.preventDefault();
+            event.stopPropagation();
+            suppressClick.current = false;
           }}>
           {[-2, -1, 0, 1, 2].map((slot) => {
             const position = center + slot;

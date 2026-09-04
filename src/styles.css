@@ -1649,6 +1649,7 @@ main {
   min-width: 0;
   height: 470px;
   touch-action: pan-y;
+  user-select: none;
   overflow: clip;
   overflow-clip-margin: 6px;
 }
