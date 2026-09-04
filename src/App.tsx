@@ -147,6 +147,24 @@ function Banner() {
   const [slide, setSlide] = useState(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const photos = ["mechanic-source-1.png", "slide-2.png", "slide-3.png"];
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let timer: number | undefined;
+    const updateTimer = () => {
+      window.clearInterval(timer);
+      if (!reducedMotion.matches) {
+        timer = window.setInterval(() => {
+          if (!document.hidden) setSlide((value) => (value + 1) % 3);
+        }, 5000);
+      }
+    };
+    updateTimer();
+    reducedMotion.addEventListener("change", updateTimer);
+    return () => {
+      window.clearInterval(timer);
+      reducedMotion.removeEventListener("change", updateTimer);
+    };
+  }, []);
   return (
     <section className="hero" aria-labelledby="hero-title" aria-roledescription="輪播" tabIndex={0}
       onKeyDown={(event) => {
