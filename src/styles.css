@@ -1265,6 +1265,13 @@ main {
 }
 
 .hero-photo.is-current { opacity: 1; }
+@media (min-width: 1441px) {
+  .hero-photo-mask {
+    width: calc(100% - 344.048px);
+    mask: none;
+    clip-path: polygon(439.033px 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
 .hero { touch-action: pan-y; }
 .hero:focus-visible, .hero-pagination button:focus-visible { outline: 2px solid var(--brand-red); outline-offset: -2px; }
 .hero-photo-2, .hero-photo-3 { width: 100%; height: 100%; left: 0; top: 0; transform: none; object-position: 65% center; }
@@ -1553,6 +1560,8 @@ main {
   --review-width: 420px;
   --review-step: 445px;
   --review-offset: 222.5px;
+  /* Four desktop slots; keep offscreen cards for continuous transitions. */
+  clip-path: inset(-12px max(0px, calc((100% - 1780px) / 2)));
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   padding-bottom: 64px;
@@ -1586,7 +1595,10 @@ main {
 @media (max-width: 1200px) {
   .reviews-section { padding: 80px 0; }
   .reviews-heading { width: min(610px, calc(100% - 60px)); margin-bottom: 40px; }
-  .reviews-carousel { --review-offset: 0px; }
+  .reviews-carousel {
+    --review-offset: 0px;
+    clip-path: inset(-12px max(0px, calc((100% - 2225px) / 2)));
+  }
 }
 @media (max-width: 450px) {
   .reviews-section { padding: 60px 0; }
@@ -1596,7 +1608,12 @@ main {
   .reviews-heading .section-heading p { font-size: 16px; letter-spacing: 1.6px; }
   .reviews-arrows { gap: 7px; }
   .reviews-arrows button, .reviews-arrows img { width: 30px; height: 30px; }
-  .reviews-carousel { --review-width: calc(100% - 60px); --review-step: calc(100% + 25px); padding-bottom: 0; }
+  .reviews-carousel {
+    --review-width: calc(100% - 60px);
+    --review-step: calc(100% + 85px);
+    padding-bottom: 0;
+    clip-path: inset(-12px 20px);
+  }
   .review-card { padding: 40px 30px; }
   .review-card.is-lower { margin: 0; }
 }

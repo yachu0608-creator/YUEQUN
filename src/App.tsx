@@ -533,13 +533,36 @@ function Team() {
 }
 
 // Original Figma placeholder content; not a live review feed.
-const reviews = Array.from({ length: 4 }, () => ({
-  author: "王先生 / 台中市",
-  text: "老闆經驗豐富，是大廠出來的專業維修師，我們家過保固期限的車車，都會專程開回來這保養維修。",
-}));
+const reviews = [
+  {
+    author: "黃先生 / 桃園市",
+    avatar: "avatar-huang.png",
+    text: "老闆經驗豐富又專業，家裡過保固的車都固定回來保養維修，檢查仔細，讓人很放心。",
+  },
+  {
+    author: "廖小姐 / 南投縣",
+    avatar: "avatar-liao.png",
+    text: "從定期保養到維修都很專業，老闆會清楚說明車況和需要處理的項目，是我們家長期信賴的汽車維修廠。",
+  },
+  {
+    author: "陳先生 / 台中市",
+    avatar: "avatar-chen.png",
+    text: "VOLVO專業電腦判斷修復，我的XC90中古車防滑穩定系統故障燈亮著，老闆給我診斷是煞車總帮壓力感應器故障，診斷正確免花冤枉錢。",
+  },
+  {
+    author: "謝小姐 / 苗栗縣",
+    avatar: "avatar-hsieh.png",
+    text: "老板娘熱心親切，即時的幫忙令人感動，專業修理，謝謝🙏！",
+  },
+  {
+    author: "徐先生 / 台中市",
+    avatar: "avatar-hsu.png",
+    text: "找專業的老闆就對了，老闆娘親切誠懇，感謝越群汽車維修服務。",
+  },
+];
 
 function Reviews() {
-  const [position, setPosition] = useState(0);
+  const [position, setPosition] = useState(2);
   const moving = useRef(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const touch = useRef<{ x: number; y: number } | null>(null);
@@ -580,14 +603,14 @@ function Reviews() {
           const index = ((key % reviews.length) + reviews.length) % reviews.length;
           const review = reviews[index];
           return (
-            <article key={key} className={`review-card${index % 2 ? " is-lower" : ""}`}
+            <article key={key} className={`review-card${key % 2 !== 0 ? " is-lower" : ""}`}
               style={{ "--slot": slot } as CSSProperties} aria-hidden={slot !== 0}
               aria-label={`第 ${index + 1} 則評論，${review.author}`}>
               <div className="review-rating"><img className="review-quote" src="/assets/reviews/quote.svg" alt="" />
                 <span><img src="/assets/reviews/stars.svg" alt="5 顆星" /><strong>5.0</strong></span>
               </div>
               <p className="review-text">{review.text}</p>
-              <div className="review-person"><img src="/assets/reviews/avatar.png" alt="" /><span>{review.author}</span></div>
+              <div className="review-person"><img src={`/assets/reviews/${review.avatar}`} alt="" /><span>{review.author}</span></div>
             </article>
           );
         })}
