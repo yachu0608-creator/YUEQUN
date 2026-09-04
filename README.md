@@ -20,4 +20,3 @@ pnpm preview
 Netlify 匯入此 repository 時，Base directory 留空、Build command 為 `pnpm build`、Publish directory 為 `dist`；設定也已包含在 netlify.toml。
 
 這是待完成驗收的前端版本：Banner 自動輪播、部分手機 QA 及正式 LINE 預約連結仍待處理。評論使用設計示意資料。不要直接雙擊 index.html 開啟。
-
