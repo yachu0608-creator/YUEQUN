@@ -1,7 +1,7 @@
 :root {
   color: #000;
   background: #fff;
-  font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  font-family: "Noto Sans TC Variable", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
   font-synthesis: none;
   --brand-red: #bb0000;
   --header-height: 80px;

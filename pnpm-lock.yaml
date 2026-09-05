@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@fontsource-variable/noto-sans-tc':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@vitejs/plugin-react':
         specifier: latest
         version: 6.1.1(vite@8.2.2)
@@ -32,6 +35,9 @@ importers:
         version: 19.2.5(@types/react@19.2.18)
 
 packages:
+
+  '@fontsource-variable/noto-sans-tc@5.3.0':
+    resolution: {integrity: sha512-sniyvTx+yRXlce9bjBV0i3kBG3/YFJiz6SZA9plNJLCR4TbY8il+G759gAXWHZu01eAclbJEN2YR+qbQjZTjkg==}
 
   '@oxc-project/types@0.147.0':
     resolution: {integrity: sha512-IJ3s6ltHLp45S0bh7phkX+gJO7A1Wuz2EaqpAhb8WjqDwbzMiWKHhyyT42tskaWjEYXtHtVCPpnBJVT9+dcRLg==}
@@ -464,6 +470,8 @@ packages:
         optional: true
 
 snapshots:
+
+  '@fontsource-variable/noto-sans-tc@5.3.0': {}
 
   '@oxc-project/types@0.147.0': {}
 
