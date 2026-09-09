@@ -87,7 +87,7 @@ function Header() {
     <header className="site-header">
       <nav className="site-nav" aria-label="主要導覽">
         <a className="brand" href="#top" aria-label="越群汽車修配廠，回到頁首" onClick={returnToTop}>
-          <img src="/assets/logo.svg" alt="越群汽車修配廠" />
+          <img src={`${import.meta.env.BASE_URL}assets/logo.svg`} alt="越群汽車修配廠" />
         </a>
 
         <div className="desktop-navigation">
@@ -182,16 +182,16 @@ function Banner() {
         touchStart.current = null;
         if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) setSlide((value) => (value + (dx < 0 ? 1 : 2)) % 3);
       }}>
-      <img className="hero-watermark" src="/assets/banner/left-watermark.svg" alt="" aria-hidden="true" />
-      <img className="hero-gradient" src="/assets/banner/white-gradient.svg" alt="" aria-hidden="true" />
+      <img className="hero-watermark" src={`${import.meta.env.BASE_URL}assets/banner/left-watermark.svg`} alt="" aria-hidden="true" />
+      <img className="hero-gradient" src={`${import.meta.env.BASE_URL}assets/banner/white-gradient.svg`} alt="" aria-hidden="true" />
 
       <div className="hero-photo-mask" aria-hidden="true">
-        {photos.map((photo, index) => <img key={photo} className={`hero-photo hero-photo-${index + 1}${slide === index ? " is-current" : ""}`} src={`/assets/banner/${photo}`} alt="" />)}
+        {photos.map((photo, index) => <img key={photo} className={`hero-photo hero-photo-${index + 1}${slide === index ? " is-current" : ""}`} src={`${import.meta.env.BASE_URL}assets/banner/${photo}`} alt="" />)}
       </div>
 
-      <img className="hero-red-upper" src="/assets/banner/red-upper.svg" alt="" aria-hidden="true" />
-      <img className="hero-red-lower" src="/assets/banner/red-lower.svg" alt="" aria-hidden="true" />
-      <img className="hero-line-art" src="/assets/banner/line-art.svg" alt="" aria-hidden="true" />
+      <img className="hero-red-upper" src={`${import.meta.env.BASE_URL}assets/banner/red-upper.svg`} alt="" aria-hidden="true" />
+      <img className="hero-red-lower" src={`${import.meta.env.BASE_URL}assets/banner/red-lower.svg`} alt="" aria-hidden="true" />
+      <img className="hero-line-art" src={`${import.meta.env.BASE_URL}assets/banner/line-art.svg`} alt="" aria-hidden="true" />
 
       <p className="hero-since" aria-label="創立於 2001 年">
         SINCE<br />2001
@@ -236,13 +236,13 @@ function ServiceCard({ card, preview = false, clone = false }: { card: (typeof s
     >
       <img
         className="service-photo"
-        src={`/assets/services/${card.asset}.png`}
+        src={`${import.meta.env.BASE_URL}assets/services/${card.asset}.png`}
         alt={preview ? "" : `${card.title}服務示意`}
       />
       <div className="service-card-copy">
         <div className="service-card-title">
           <span className="service-icon" aria-hidden="true">
-            <img src={`/assets/services/${card.asset}-icon.svg`} alt="" />
+            <img src={`${import.meta.env.BASE_URL}assets/services/${card.asset}-icon.svg`} alt="" />
           </span>
           <div>
             <h3>{card.title}</h3>
@@ -319,13 +319,13 @@ function Services() {
     <section className="services-section" id="services" aria-labelledby="services-title">
       <img
         className="services-background-texture"
-        src="/assets/services/background-texture.png"
+        src={`${import.meta.env.BASE_URL}assets/services/background-texture.png`}
         alt=""
         aria-hidden="true"
       />
       <img
         className="services-background-red"
-        src="/assets/services/background-red.svg"
+        src={`${import.meta.env.BASE_URL}assets/services/background-red.svg`}
         alt=""
         aria-hidden="true"
       />
@@ -356,10 +356,10 @@ function Services() {
 
           <div className="service-arrows" aria-label="服務項目輪播控制">
             <button type="button" aria-label="上一個服務項目" onClick={previousService}>
-              <img src="/assets/services/arrow-prev.svg" alt="" />
+              <img src={`${import.meta.env.BASE_URL}assets/services/arrow-prev.svg`} alt="" />
             </button>
             <button type="button" aria-label="下一個服務項目" onClick={nextService}>
-              <img src="/assets/services/arrow-next.svg" alt="" />
+              <img src={`${import.meta.env.BASE_URL}assets/services/arrow-next.svg`} alt="" />
             </button>
           </div>
         </div>
@@ -413,22 +413,22 @@ const reassuranceCards = [
   {
     title: "專業技師",
     description: ["經驗豐富、專業診斷", "提供可靠維修建議"],
-    icon: "/assets/reassurance/technician.svg",
+    icon: `${import.meta.env.BASE_URL}assets/reassurance/technician.svg`,
   },
   {
     title: "透明報價",
     description: ["維修項目與費用明確", "不亂加價，不強銷"],
-    icon: "/assets/reassurance/quote.svg",
+    icon: `${import.meta.env.BASE_URL}assets/reassurance/quote.svg`,
   },
   {
     title: "貼心溝通",
     description: ["耐心解說內容", "讓您了解維修狀況"],
-    icon: "/assets/reassurance/communication.svg",
+    icon: `${import.meta.env.BASE_URL}assets/reassurance/communication.svg`,
   },
   {
     title: "誠信保固",
     description: ["維修後提供保固服務", "讓您後續更安心"],
-    icon: "/assets/reassurance/warranty.svg",
+    icon: `${import.meta.env.BASE_URL}assets/reassurance/warranty.svg`,
   },
 ];
 
@@ -436,9 +436,9 @@ function Reassurance() {
   return (
     <section className="reassurance-section" id="reassurance" aria-labelledby="reassurance-title">
       <div className="reassurance-corner-desktop" aria-hidden="true">
-        <img src="/assets/reassurance/red-corner-desktop.svg" alt="" />
+        <img src={`${import.meta.env.BASE_URL}assets/reassurance/red-corner-desktop.svg`} alt="" />
       </div>
-      <img className="reassurance-corner" src="/assets/reassurance/red-corner.svg" alt="" aria-hidden="true" />
+      <img className="reassurance-corner" src={`${import.meta.env.BASE_URL}assets/reassurance/red-corner.svg`} alt="" aria-hidden="true" />
       <div className="reassurance-layout">
         <div className="reassurance-heading">
           <div className="section-heading">
@@ -467,9 +467,9 @@ function Reassurance() {
 }
 
 const teamMembers = [
-  { photo: "/assets/team/main-456.png", name: "王志詺", englishName: "Michael Wang", experience: "35年經驗", specialty: "引擎系統診斷／底盤維修與調校" },
-  { photo: "/assets/team/right-456.png", name: "陳文卿", englishName: "Wen-ching Chen", experience: "20年經驗", specialty: "電腦診斷維修／電機系統檢修" },
-  { photo: "/assets/team/left-456.png", name: "王豐穎", englishName: "Richard Wang", experience: "7年經驗", specialty: "冷氣系統檢修／清洗與保養" },
+  { photo: `${import.meta.env.BASE_URL}assets/team/main-456.png`, name: "王志詺", englishName: "Michael Wang", experience: "35年經驗", specialty: "引擎系統診斷／底盤維修與調校" },
+  { photo: `${import.meta.env.BASE_URL}assets/team/right-456.png`, name: "陳文卿", englishName: "Wen-ching Chen", experience: "20年經驗", specialty: "電腦診斷維修／電機系統檢修" },
+  { photo: `${import.meta.env.BASE_URL}assets/team/left-456.png`, name: "王豐穎", englishName: "Richard Wang", experience: "7年經驗", specialty: "冷氣系統檢修／清洗與保養" },
 ];
 
 function Team() {
@@ -501,8 +501,8 @@ function Team() {
             <p>經驗豐富，技術到位，用心照顧您的愛車。</p>
           </div>
           <div className="service-arrows team-arrows" aria-label="技師輪播控制">
-            <button type="button" aria-label="上一位技師" onClick={() => move(-1)}><img src="/assets/services/arrow-next.svg" alt="" /></button>
-            <button type="button" aria-label="下一位技師" onClick={() => move(1)}><img src="/assets/services/arrow-next.svg" alt="" /></button>
+            <button type="button" aria-label="上一位技師" onClick={() => move(-1)}><img src={`${import.meta.env.BASE_URL}assets/services/arrow-next.svg`} alt="" /></button>
+            <button type="button" aria-label="下一位技師" onClick={() => move(1)}><img src={`${import.meta.env.BASE_URL}assets/services/arrow-next.svg`} alt="" /></button>
           </div>
         </div>
         <div className="team-carousel" role="region" aria-roledescription="輪播" aria-label="技師團隊示意資料"
@@ -611,8 +611,8 @@ function Reviews() {
       <div className="reviews-heading">
         <div className="section-heading"><p>CUSTOMER REVIEWS</p><h2 id="reviews-title">車主安心推薦</h2></div>
         <div className="service-arrows reviews-arrows" aria-label="評論輪播控制">
-          <button type="button" aria-label="上一則評論" onClick={() => move(-1)}><img src="/assets/services/arrow-next.svg" alt="" /></button>
-          <button type="button" aria-label="下一則評論" onClick={() => move(1)}><img src="/assets/services/arrow-next.svg" alt="" /></button>
+          <button type="button" aria-label="上一則評論" onClick={() => move(-1)}><img src={`${import.meta.env.BASE_URL}assets/services/arrow-next.svg`} alt="" /></button>
+          <button type="button" aria-label="下一則評論" onClick={() => move(1)}><img src={`${import.meta.env.BASE_URL}assets/services/arrow-next.svg`} alt="" /></button>
         </div>
       </div>
       <div className="reviews-carousel" role="region" aria-roledescription="輪播" aria-label="車主評論" tabIndex={0}
@@ -638,11 +638,11 @@ function Reviews() {
             <article key={key} className={`review-card${key % 2 !== 0 ? " is-lower" : ""}`}
               style={{ "--slot": slot } as CSSProperties} aria-hidden={slot !== 0}
               aria-label={`第 ${index + 1} 則評論，${review.author}`}>
-              <div className="review-rating"><img className="review-quote" src="/assets/reviews/quote.svg" alt="" />
-                <span><img src="/assets/reviews/stars.svg" alt="5 顆星" /><strong>5.0</strong></span>
+              <div className="review-rating"><img className="review-quote" src={`${import.meta.env.BASE_URL}assets/reviews/quote.svg`} alt="" />
+                <span><img src={`${import.meta.env.BASE_URL}assets/reviews/stars.svg`} alt="5 顆星" /><strong>5.0</strong></span>
               </div>
               <p className="review-text">{review.text}</p>
-              <div className="review-person"><img src={`/assets/reviews/${review.avatar}`} alt="" /><span>{review.author}</span></div>
+              <div className="review-person"><img src={`${import.meta.env.BASE_URL}assets/reviews/${review.avatar}`} alt="" /><span>{review.author}</span></div>
             </article>
           );
         })}
@@ -659,9 +659,9 @@ function Contact() {
         <div className="contact-copy">
           <div className="section-heading"><p>CONTACT US</p><h2 id="contact-title">聯絡我們</h2></div>
           <div className="contact-details">
-            <div><img src="/assets/contact/phone.svg" alt="" /><a href="tel:0425323838">04-25323838</a></div>
-            <div><img src="/assets/contact/clock.svg" alt="" /><p>週一～週六 8:30～17:30</p></div>
-            <div><img className="contact-location" src="/assets/contact/location.svg" alt="" /><p>台中市潭子區中山路三段425號</p></div>
+            <div><img src={`${import.meta.env.BASE_URL}assets/contact/phone.svg`} alt="" /><a href="tel:0425323838">04-25323838</a></div>
+            <div><img src={`${import.meta.env.BASE_URL}assets/contact/clock.svg`} alt="" /><p>週一～週六 8:30～17:30</p></div>
+            <div><img className="contact-location" src={`${import.meta.env.BASE_URL}assets/contact/location.svg`} alt="" /><p>台中市潭子區中山路三段425號</p></div>
           </div>
           <button type="button" className="line-cta contact-cta" aria-disabled="true" title="預約連結準備中">
             <span className="line-icon" aria-hidden="true" /><span>LINE 線上預約</span>
@@ -680,15 +680,15 @@ function Footer() {
     <footer className="site-footer">
       <div className="footer-content">
         <a className="footer-logo" href="#top" aria-label="越群汽車修配廠，回到頁首">
-          <img src="/assets/footer/logo.svg" alt="越群汽車修配廠" />
+          <img src={`${import.meta.env.BASE_URL}assets/footer/logo.svg`} alt="越群汽車修配廠" />
         </a>
         <nav className="footer-links" aria-label="頁尾導覽">
           {navigation.map(({ id, label }) => <a href={`#${id}`} key={id}>{label}</a>)}
         </nav>
         <p className="footer-copyright">©{new Date().getFullYear()}越群汽車修配廠 All Rights Reserved</p>
       </div>
-      <a className="footer-top" href="#top" aria-label="回到頁首"><img src="/assets/footer/top.svg" alt="" /></a>
-      <img className="footer-wordmark" src="/assets/footer/wordmark.svg" alt="" aria-hidden="true" />
+      <a className="footer-top" href="#top" aria-label="回到頁首"><img src={`${import.meta.env.BASE_URL}assets/footer/top.svg`} alt="" /></a>
+      <img className="footer-wordmark" src={`${import.meta.env.BASE_URL}assets/footer/wordmark.svg`} alt="" aria-hidden="true" />
     </footer>
   );
 }
@@ -707,7 +707,7 @@ export default function App() {
           <div className="brand-marquee-track">
             {[0, 1].map((group) => (
               <div className="brand-marquee-group" key={group}>
-                {[0, 1].map((copy) => <img key={copy} src="/assets/marquee.svg" alt="" draggable={false} />)}
+                {[0, 1].map((copy) => <img key={copy} src={`${import.meta.env.BASE_URL}assets/marquee.svg`} alt="" draggable={false} />)}
               </div>
             ))}
           </div>
