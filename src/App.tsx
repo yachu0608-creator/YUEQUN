@@ -10,6 +10,8 @@ const navigation: Array<{ id: SectionId; label: string }> = [
   { id: "contact", label: "聯絡我們" },
 ];
 
+const lineChatUrl = "https://yachu0608-creator.github.io/yuequn-liff-appointment/high-fi/?liff=appointment";
+
 type LineCtaProps = {
   className?: string;
   onClick?: () => void;
@@ -17,7 +19,7 @@ type LineCtaProps = {
 
 function LineCta({ className = "", onClick }: LineCtaProps) {
   return (
-    <a className={`line-cta ${className}`.trim()} href="#contact" onClick={onClick}>
+    <a className={`line-cta ${className}`.trim()} href={lineChatUrl} onClick={onClick}>
       <span className="line-icon" aria-hidden="true" />
       <span>LINE 線上預約</span>
     </a>
@@ -663,9 +665,7 @@ function Contact() {
             <div><img src={`${import.meta.env.BASE_URL}assets/contact/clock.svg`} alt="" /><p>週一～週六 8:30～17:30</p></div>
             <div><img className="contact-location" src={`${import.meta.env.BASE_URL}assets/contact/location.svg`} alt="" /><p>台中市潭子區中山路三段425號</p></div>
           </div>
-          <button type="button" className="line-cta contact-cta" aria-disabled="true" title="預約連結準備中">
-            <span className="line-icon" aria-hidden="true" /><span>LINE 線上預約</span>
-          </button>
+          <LineCta className="contact-cta" />
         </div>
         <iframe className="contact-map" title="越群汽車修配廠位置：台中市潭子區中山路三段425號"
           src={`https://maps.google.com/maps?q=${encodeURIComponent("台中市潭子區中山路三段425號")}&output=embed&hl=zh-TW`}
