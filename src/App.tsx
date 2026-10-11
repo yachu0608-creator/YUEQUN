@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type FocusEvent } from "react";
 
 type SectionId = "services" | "reassurance" | "team" | "reviews" | "contact";
 
@@ -11,6 +11,48 @@ const navigation: Array<{ id: SectionId; label: string }> = [
 ];
 
 const lineChatUrl = "https://yachu0608-creator.github.io/yuequn-liff-appointment/high-fi/?liff=appointment";
+const carouselInterval = 5000;
+
+function useAutoAdvance(advance: () => void, delay = carouselInterval) {
+  const advanceRef = useRef(advance);
+  const [paused, setPaused] = useState(false);
+  const [restartKey, setRestartKey] = useState(0);
+  advanceRef.current = advance;
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let timer: number | undefined;
+
+    const updateTimer = () => {
+      window.clearInterval(timer);
+      if (!reducedMotion.matches && !paused) {
+        timer = window.setInterval(() => {
+          if (!document.hidden) advanceRef.current();
+        }, delay);
+      }
+    };
+
+    updateTimer();
+    reducedMotion.addEventListener("change", updateTimer);
+    return () => {
+      window.clearInterval(timer);
+      reducedMotion.removeEventListener("change", updateTimer);
+    };
+  }, [delay, paused, restartKey]);
+
+  return {
+    paused,
+    restart: () => setRestartKey((value) => value + 1),
+    interactionProps: {
+      onMouseEnter: () => setPaused(true),
+      onMouseLeave: () => setPaused(false),
+      onFocusCapture: () => setPaused(true),
+      onBlurCapture: (event: FocusEvent<HTMLElement>) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setPaused(false);
+      },
+    },
+  };
+}
 
 type LineCtaProps = {
   className?: string;
@@ -301,6 +343,8 @@ function Services() {
     setTrackIndex((index) => index + 1);
   };
 
+  const autoplay = useAutoAdvance(nextService);
+
   const finishLoop = () => {
     if (trackIndex !== 0 && trackIndex !== serviceCards.length + 1) {
       isSliding.current = false;
@@ -318,7 +362,7 @@ function Services() {
   };
 
   return (
-    <section className="services-section" id="services" aria-labelledby="services-title">
+    <section className="services-section" id="services" aria-labelledby="services-title" {...autoplay.interactionProps}>
       <img
         className="services-background-texture"
         src={`${import.meta.env.BASE_URL}assets/services/background-texture.png`}
@@ -348,7 +392,7 @@ function Services() {
                   role="tab"
                   aria-selected={activeCategory === index}
                   aria-controls="service-carousel"
-                  onClick={() => selectService(index)}
+                  onClick={() => { autoplay.restart(); selectService(index); }}
                 >
                   {card.title}
                 </button>
@@ -357,10 +401,10 @@ function Services() {
           </div>
 
           <div className="service-arrows" aria-label="服務項目輪播控制">
-            <button type="button" aria-label="上一個服務項目" onClick={previousService}>
+            <button type="button" aria-label="上一個服務項目" onClick={() => { autoplay.restart(); previousService(); }}>
               <img src={`${import.meta.env.BASE_URL}assets/services/arrow-prev.svg`} alt="" />
             </button>
-            <button type="button" aria-label="下一個服務項目" onClick={nextService}>
+            <button type="button" aria-label="下一個服務項目" onClick={() => { autoplay.restart(); nextService(); }}>
               <img src={`${import.meta.env.BASE_URL}assets/services/arrow-next.svg`} alt="" />
             </button>
           </div>
@@ -382,6 +426,7 @@ function Services() {
             const dx = event.clientX - start.x;
             const dy = event.clientY - start.y;
             if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+              autoplay.restart();
               if (dx < 0) nextService();
               else previousService();
             }
@@ -491,8 +536,10 @@ function Team() {
     timer.current = setTimeout(() => { moving.current = false; }, duration);
   };
 
+  const autoplay = useAutoAdvance(() => move(1));
+
   return (
-    <section className="team-section" id="team" aria-labelledby="team-title">
+    <section className="team-section" id="team" aria-labelledby="team-title" {...autoplay.interactionProps}>
       <div className="team-layout">
         <div className="team-heading-controls">
           <div className="team-heading">
@@ -503,8 +550,8 @@ function Team() {
             <p>經驗豐富，技術到位，用心照顧您的愛車。</p>
           </div>
           <div className="service-arrows team-arrows" aria-label="技師輪播控制">
-            <button type="button" aria-label="上一位技師" onClick={() => move(-1)}><img src={`${import.meta.env.BASE_URL}assets/services/arrow-next.svg`} alt="" /></button>
-            <button type="button" aria-label="下一位技師" onClick={() => move(1)}><img src={`${import.meta.env.BASE_URL}assets/services/arrow-next.svg`} alt="" /></button>
+            <button type="button" aria-label="上一位技師" onClick={() => { autoplay.restart(); move(-1); }}><img src={`${import.meta.env.BASE_URL}assets/services/arrow-next.svg`} alt="" /></button>
+            <button type="button" aria-label="下一位技師" onClick={() => { autoplay.restart(); move(1); }}><img src={`${import.meta.env.BASE_URL}assets/services/arrow-next.svg`} alt="" /></button>
           </div>
         </div>
         <div className="team-carousel" role="region" aria-roledescription="輪播" aria-label="技師團隊示意資料"
@@ -512,6 +559,7 @@ function Team() {
           onKeyDown={(event) => {
             if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
               event.preventDefault();
+              autoplay.restart();
               move(event.key === "ArrowLeft" ? -1 : 1);
             }
           }}
@@ -529,7 +577,10 @@ function Team() {
             const dy = event.clientY - swipeStart.current.y;
             swipeStart.current = null;
             suppressClick.current = Math.abs(dx) > 40 || Math.abs(dy) > 40;
-            if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) move(dx < 0 ? 1 : -1);
+            if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+              autoplay.restart();
+              move(dx < 0 ? 1 : -1);
+            }
           }}
           onClickCapture={(event) => {
             if (!suppressClick.current || event.detail === 0) return;
@@ -547,7 +598,7 @@ function Team() {
                 aria-label={`第 ${index + 1} 張，共 3 張`}>
                 {Math.abs(slot) === 1 && <button className="team-card-select" type="button" tabIndex={-1}
                   aria-label={slot < 0 ? "切換上一位技師" : "切換下一位技師"}
-                  onClick={() => move(slot)} />}
+                  onClick={() => { autoplay.restart(); move(slot); }} />}
                 <img className="team-portrait" src={member.photo} alt={slot === 0 ? "技師示意照片" : ""} draggable={false} />
                 <div className="team-card-copy">
                   <div className="team-name-row">
@@ -560,7 +611,7 @@ function Team() {
             );
           })}
         </div>
-        <span className="team-status" aria-live="polite">第 {((center % 3) + 3) % 3 + 1} 張，共 3 張技師示意卡片</span>
+        <span className="team-status" aria-live={autoplay.paused ? "polite" : "off"}>第 {((center % 3) + 3) % 3 + 1} 張，共 3 張技師示意卡片</span>
       </div>
     </section>
   );
@@ -608,19 +659,21 @@ function Reviews() {
     timer.current = setTimeout(() => { moving.current = false; },
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 450);
   };
+
+  const autoplay = useAutoAdvance(() => move(1));
   return (
-    <section id="reviews" className="reviews-section" aria-labelledby="reviews-title">
+    <section id="reviews" className="reviews-section" aria-labelledby="reviews-title" {...autoplay.interactionProps}>
       <div className="reviews-heading">
         <div className="section-heading"><p>CUSTOMER REVIEWS</p><h2 id="reviews-title">車主安心推薦</h2></div>
         <div className="service-arrows reviews-arrows" aria-label="評論輪播控制">
-          <button type="button" aria-label="上一則評論" onClick={() => move(-1)}><img src={`${import.meta.env.BASE_URL}assets/services/arrow-next.svg`} alt="" /></button>
-          <button type="button" aria-label="下一則評論" onClick={() => move(1)}><img src={`${import.meta.env.BASE_URL}assets/services/arrow-next.svg`} alt="" /></button>
+          <button type="button" aria-label="上一則評論" onClick={() => { autoplay.restart(); move(-1); }}><img src={`${import.meta.env.BASE_URL}assets/services/arrow-next.svg`} alt="" /></button>
+          <button type="button" aria-label="下一則評論" onClick={() => { autoplay.restart(); move(1); }}><img src={`${import.meta.env.BASE_URL}assets/services/arrow-next.svg`} alt="" /></button>
         </div>
       </div>
       <div className="reviews-carousel" role="region" aria-roledescription="輪播" aria-label="車主評論" tabIndex={0}
         onKeyDown={(event) => {
           if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-            event.preventDefault(); move(event.key === "ArrowLeft" ? -1 : 1);
+            event.preventDefault(); autoplay.restart(); move(event.key === "ArrowLeft" ? -1 : 1);
           }
         }}
         onTouchStart={(event) => { touch.current = { x: event.touches[0].clientX, y: event.touches[0].clientY }; }}
@@ -630,7 +683,10 @@ function Reviews() {
           const dx = event.changedTouches[0].clientX - touch.current.x;
           const dy = event.changedTouches[0].clientY - touch.current.y;
           touch.current = null;
-          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) move(dx < 0 ? 1 : -1);
+          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+            autoplay.restart();
+            move(dx < 0 ? 1 : -1);
+          }
         }}>
         {[-4, -3, -2, -1, 0, 1, 2, 3, 4].map((slot) => {
           const key = position + slot;
@@ -649,7 +705,7 @@ function Reviews() {
           );
         })}
       </div>
-      <span className="team-status" aria-live="polite">第 {((position % reviews.length) + reviews.length) % reviews.length + 1} 則，共 {reviews.length} 則評論</span>
+      <span className="team-status" aria-live={autoplay.paused ? "polite" : "off"}>第 {((position % reviews.length) + reviews.length) % reviews.length + 1} 則，共 {reviews.length} 則評論</span>
     </section>
   );
 }
@@ -718,3 +774,4 @@ export default function App() {
     </div>
   );
 }
+
