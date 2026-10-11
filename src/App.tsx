@@ -14,10 +14,24 @@ const lineChatUrl = "https://yachu0608-creator.github.io/yuequn-liff-appointment
 const carouselInterval = 5000;
 
 function useAutoAdvance(advance: () => void, delay = carouselInterval) {
+  const sectionRef = useRef<HTMLElement | null>(null);
   const advanceRef = useRef(advance);
+  const [isVisible, setIsVisible] = useState(false);
   const [paused, setPaused] = useState(false);
   const [restartKey, setRestartKey] = useState(0);
   advanceRef.current = advance;
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0.45 },
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -25,7 +39,7 @@ function useAutoAdvance(advance: () => void, delay = carouselInterval) {
 
     const updateTimer = () => {
       window.clearInterval(timer);
-      if (!reducedMotion.matches && !paused) {
+      if (isVisible && !reducedMotion.matches && !paused) {
         timer = window.setInterval(() => {
           if (!document.hidden) advanceRef.current();
         }, delay);
@@ -38,14 +52,13 @@ function useAutoAdvance(advance: () => void, delay = carouselInterval) {
       window.clearInterval(timer);
       reducedMotion.removeEventListener("change", updateTimer);
     };
-  }, [delay, paused, restartKey]);
+  }, [delay, isVisible, paused, restartKey]);
 
   return {
+    sectionRef,
     paused,
     restart: () => setRestartKey((value) => value + 1),
     interactionProps: {
-      onMouseEnter: () => setPaused(true),
-      onMouseLeave: () => setPaused(false),
       onFocusCapture: () => setPaused(true),
       onBlurCapture: (event: FocusEvent<HTMLElement>) => {
         if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setPaused(false);
@@ -362,7 +375,7 @@ function Services() {
   };
 
   return (
-    <section className="services-section" id="services" aria-labelledby="services-title" {...autoplay.interactionProps}>
+    <section ref={autoplay.sectionRef} className="services-section" id="services" aria-labelledby="services-title" {...autoplay.interactionProps}>
       <img
         className="services-background-texture"
         src={`${import.meta.env.BASE_URL}assets/services/background-texture.png`}
@@ -539,7 +552,7 @@ function Team() {
   const autoplay = useAutoAdvance(() => move(1));
 
   return (
-    <section className="team-section" id="team" aria-labelledby="team-title" {...autoplay.interactionProps}>
+    <section ref={autoplay.sectionRef} className="team-section" id="team" aria-labelledby="team-title" {...autoplay.interactionProps}>
       <div className="team-layout">
         <div className="team-heading-controls">
           <div className="team-heading">
@@ -662,7 +675,7 @@ function Reviews() {
 
   const autoplay = useAutoAdvance(() => move(1));
   return (
-    <section id="reviews" className="reviews-section" aria-labelledby="reviews-title" {...autoplay.interactionProps}>
+    <section ref={autoplay.sectionRef} id="reviews" className="reviews-section" aria-labelledby="reviews-title" {...autoplay.interactionProps}>
       <div className="reviews-heading">
         <div className="section-heading"><p>CUSTOMER REVIEWS</p><h2 id="reviews-title">車主安心推薦</h2></div>
         <div className="service-arrows reviews-arrows" aria-label="評論輪播控制">
