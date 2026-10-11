@@ -11,7 +11,7 @@ const navigation: Array<{ id: SectionId; label: string }> = [
 ];
 
 const lineChatUrl = "https://yachu0608-creator.github.io/yuequn-liff-appointment/high-fi/?liff=appointment";
-const carouselInterval = 5000;
+const carouselInterval = 3000;
 
 function useAutoAdvance(advance: () => void, delay = carouselInterval) {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -212,7 +212,7 @@ function Banner() {
       if (!reducedMotion.matches) {
         timer = window.setInterval(() => {
           if (!document.hidden) setSlide((value) => (value + 1) % 3);
-        }, 5000);
+        }, 3000);
       }
     };
     updateTimer();
